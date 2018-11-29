@@ -104,7 +104,7 @@ class RedisSessionStore < ActionDispatch::Session::AbstractStore
     begin
       data ? decode(data) : nil
     rescue StandardError => e
-      Raven.capture_exception(e, { raw_session_data: data })
+      Raven.capture_exception(e, { extra: { raw_session_data: data } })
       destroy_session_from_sid(sid, drop: true)
       on_session_load_error.call(e, sid) if on_session_load_error
       nil
